@@ -3,22 +3,35 @@
 PLUGIN_OS ?= linux
 PLUGIN_ARCH ?= amd64
 
-plugin_pam: bin/$(PLUGIN_OS)$(PLUGIN_ARCH)/pam_linux.so
+plugin_zitadel: bin/$(PLUGIN_OS)$(PLUGIN_ARCH)/zitadel_linux.so
 
-bin/$(PLUGIN_OS)$(PLUGIN_ARCH)/pam_linux.so: pkg/plugins/glauth-pam/pam_linux.go
-	GOOS=$(PLUGIN_OS) GOARCH=$(PLUGIN_ARCH) go build ${TRIM_FLAGS} -ldflags "${BUILD_VARS}" -buildmode=plugin -o $@ $^
+bin/$(PLUGIN_OS)$(PLUGIN_ARCH)/zitadel_linux.so:
+	go build -buildmode=plugin -o $@ $^
 
-plugin_pam_linux_amd64:
-	PLUGIN_OS=linux PLUGIN_ARCH=amd64 make plugin_pam
+plugin_zitadel_linux_amd64:
+	PLUGIN_OS=linux PLUGIN_ARCH=amd64 make plugin_zitadel
 
-plugin_pam_linux_arm64:
-	PLUGIN_OS=linux PLUGIN_ARCH=arm64 make plugin_pam
+plugin_zitadel_linux_arm64:
+	PLUGIN_OS=linux PLUGIN_ARCH=arm64 make plugin_zitadel
 
-plugin_pam_darwin_amd64:
-	PLUGIN_OS=darwin PLUGIN_ARCH=amd64 make plugin_pam
+plugin_zitadel_darwin_amd64:
+	PLUGIN_OS=darwin PLUGIN_ARCH=amd64 make plugin_zitadel
 
-plugin_pam_darwin_arm64:
-	PLUGIN_OS=darwin PLUGIN_ARCH=arm64 make plugin_pam
+plugin_zitadel_darwin_arm64:
+	PLUGIN_OS=darwin PLUGIN_ARCH=arm64 make plugin_zitadel
 
-release-glauth-pam: plugin_pam_linux_amd64
-	mv bin/linuxamd64/pam_linux.so bin/pam_linux-linux-amd64.so && rmdir bin/linuxamd64
+release-glauth-zitadel: plugin_zitadel_linux_amd64
+	mv bin/linuxamd64/zitadel_linux.so bin/zitadel_linux-linux-amd64.so && rmdir bin/linuxamd64
+
+clean:
+	rm -rf bin
+
+build_glauth:
+	rm -rf gl
+	mkdir gl
+	cd gl && \
+	go build github.com/glauth/glauth/v2
+
+image:
+	docker build -t 192.168.6.10:5000/glauth/glauth:latest .
+	docker push 192.168.6.10:5000/glauth/glauth:latest
