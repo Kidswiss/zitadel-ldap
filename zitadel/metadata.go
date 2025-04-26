@@ -18,7 +18,7 @@ type MetadataResult struct {
 
 func (c *Client) ListMetadata(id string) (*MetadataResults, error) {
 
-	if m, ok := c.metadata[id]; ok {
+	if m, ok := c.metadata.Load(id); ok {
 		return m, nil
 	}
 
@@ -41,7 +41,7 @@ func (c *Client) fetchMetadata(id string) (*MetadataResults, error) {
 
 	err = json.Unmarshal(rawBody, res)
 
-	c.metadata[id] = res
+	c.metadata.Store(id, res)
 
 	return res, err
 }

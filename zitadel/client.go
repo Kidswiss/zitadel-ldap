@@ -16,9 +16,9 @@ type Client struct {
 	users        *UserResults
 	grants       *GrantResults
 	projects     *ProjectResults
-	roles        map[string]*RoleResults
-	sessionCache map[string]time.Time
-	metadata     map[string]*MetadataResults
+	roles        Map[string, *RoleResults]
+	sessionCache Map[string, time.Time]
+	metadata     Map[string, *MetadataResults]
 	log          *zerolog.Logger
 }
 
@@ -28,9 +28,9 @@ func NewClient(url, pat string, log *zerolog.Logger) *Client {
 		pat:          pat,
 		url:          url,
 		log:          log,
-		sessionCache: map[string]time.Time{},
-		roles:        map[string]*RoleResults{},
-		metadata:     map[string]*MetadataResults{},
+		sessionCache: Map[string, time.Time]{},
+		roles:        Map[string, *RoleResults]{},
+		metadata:     Map[string, *MetadataResults]{},
 	}
 
 	c.fetchAll()

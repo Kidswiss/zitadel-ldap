@@ -78,7 +78,7 @@ func (c *Client) fetchProjects() (*ProjectResults, error) {
 
 func (c *Client) ListRoles(projectID string) (*RoleResults, error) {
 
-	if r, ok := c.roles[projectID]; ok {
+	if r, ok := c.roles.Load(projectID); ok {
 		return r, nil
 	}
 
@@ -101,7 +101,7 @@ func (c *Client) fetchRoles(projectID string) (*RoleResults, error) {
 
 	err = json.Unmarshal(rawBody, res)
 
-	c.roles[projectID] = res
+	c.roles.Store(projectID, res)
 
 	return res, err
 }
