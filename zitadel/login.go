@@ -15,12 +15,12 @@ type LoginResult struct {
 
 // TODO: maybe caching the session will make things a bit faster?
 func (c *Client) Login(username, password string) (bool, error) {
-	go func() {
-		err := c.fetchAll()
-		if err != nil {
-			c.log.Err(err).Msg("Cannot fetch during data during bind")
-		}
-	}()
+	// go func() {
+	// 	err := c.fetchAll()
+	// 	if err != nil {
+	// 		c.log.Err(err).Msg("Cannot fetch during data during bind")
+	// 	}
+	// }()
 
 	c.log.Debug().Str("username", username).Msg("Logging in...")
 	hash := c.hashLogin(username, password)
