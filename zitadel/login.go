@@ -27,7 +27,7 @@ func (c *Client) Login(username, password string) (bool, error) {
 
 	// TODO: maybe we should check against the API if the session still exists...
 	if ct, ok := c.sessionCache.Load(hash); ok {
-		c.log.Debug().Str("username", username).Msg("Existing session available")
+		c.log.Debug().Str("username", username).Msg(fmt.Sprintf("Existing session available, %d seconds old", ct.Sub(time.Now()).Seconds()))
 		if ct.Sub(time.Now()).Seconds() > 3600 {
 			c.log.Info().Str("username", username).Msg("Session expired, doing a new login")
 			return c.newSession(username, password)
