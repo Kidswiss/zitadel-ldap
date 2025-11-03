@@ -15,7 +15,7 @@ import (
 	"github.com/glauth/ldap"
 	"github.com/rs/zerolog"
 
-	"github.com/jacobalberty/zitadel-ldap/zitadel"
+	"github.com/jacobalberty/zitadel-ldap/internal/zitadel"
 )
 
 type zitadelHandler struct {

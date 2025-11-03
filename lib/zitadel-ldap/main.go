@@ -7,8 +7,8 @@ import (
 	"github.com/glauth/glauth/v2/pkg/handler"
 	"github.com/rs/zerolog"
 
-	ghandler "github.com/jacobalberty/zitadel-ldap/handler"
-	"github.com/jacobalberty/zitadel-ldap/zitadel"
+	ghandler "github.com/jacobalberty/zitadel-ldap/internal/handler"
+	"github.com/jacobalberty/zitadel-ldap/internal/zitadel"
 )
 
 var (
