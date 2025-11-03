@@ -102,13 +102,10 @@ func (c *Client) fetchAll() error {
 func (c *Client) fetchTimer() {
 	ticker := time.NewTicker(10 * time.Minute)
 	go func() {
-		for {
-			select {
-			case <-ticker.C:
-				err := c.fetchAll()
-				if err != nil {
-					c.log.Err(err).Msg("Fetch timer failed")
-				}
+		for range ticker.C {
+			err := c.fetchAll()
+			if err != nil {
+				c.log.Err(err).Msg("Fetch timer failed")
 			}
 		}
 	}()
