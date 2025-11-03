@@ -1,6 +1,6 @@
 module git.earthnet.ch/simon.beck/zitadel-ldap
 
-go 1.24.2
+go 1.25.3
 
 require (
 	github.com/GeertJohan/yubigo v0.0.0-20190917122436-175bc097e60e
@@ -13,7 +13,7 @@ require (
 	github.com/BurntSushi/toml v1.3.2 // indirect
 	github.com/arl/statsviz v0.6.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
-	github.com/boombuler/barcode v1.0.1-0.20190219062509-6c824513bacc // indirect
+	github.com/boombuler/barcode v1.0.1 // indirect
 	github.com/cenkalti/backoff/v4 v4.2.1 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/docopt/docopt-go v0.0.0-20180111231733-ee0de3bc6815 // indirect
