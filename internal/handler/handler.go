@@ -37,7 +37,7 @@ func NewZitadelHandler(opts ...handler.Option) handler.Handler {
 		ldohelper:     options.LDAPHelper,
 		log:           options.Logger,
 		yubikeyAuth:   options.YubiAuth,
-		zitadelClient: zitadel.NewClient(os.Getenv("ZITADEL_URL"), os.Getenv("ZITADEL_PAT"), options.Logger),
+		zitadelClient: zitadel.NewClient(os.Getenv("ZITADEL_URL"), os.Getenv("ZITADEL_PAT"), nil, options.Logger),
 		baseDN:        options.Backend.BaseDN,
 	}
 }

@@ -10,27 +10,29 @@ import (
 )
 
 type Client struct {
-	hclient      http.Client
-	pat          string
-	url          string
-	users        *UserResults
-	grants       *GrantResults
-	projects     *ProjectResults
-	roles        Map[string, *RoleResults]
-	sessionCache Map[string, time.Time]
-	metadata     Map[string, *MetadataResults]
-	log          *zerolog.Logger
+	hclient       http.Client
+	pat           string
+	url           string
+	customHeaders http.Header
+	users         *UserResults
+	grants        *GrantResults
+	projects      *ProjectResults
+	roles         Map[string, *RoleResults]
+	sessionCache  Map[string, time.Time]
+	metadata      Map[string, *MetadataResults]
+	log           *zerolog.Logger
 }
 
-func NewClient(url, pat string, log *zerolog.Logger) *Client {
+func NewClient(url, pat string, customHeaders http.Header, log *zerolog.Logger) *Client {
 	c := &Client{
-		hclient:      http.Client{},
-		pat:          pat,
-		url:          url,
-		log:          log,
-		sessionCache: Map[string, time.Time]{},
-		roles:        Map[string, *RoleResults]{},
-		metadata:     Map[string, *MetadataResults]{},
+		hclient:       http.Client{},
+		pat:           pat,
+		url:           url,
+		customHeaders: customHeaders,
+		log:           log,
+		sessionCache:  Map[string, time.Time]{},
+		roles:         Map[string, *RoleResults]{},
+		metadata:      Map[string, *MetadataResults]{},
 	}
 
 	c.fetchAll()
@@ -56,6 +58,14 @@ func (c *Client) doRequest(method, url string, payload io.Reader) ([]byte, error
 	if err != nil {
 		return nil, err
 	}
+
+	// Add custom headers
+	for key, values := range c.customHeaders {
+		for _, value := range values {
+			req.Header.Add(key, value)
+		}
+	}
+
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", c.pat))

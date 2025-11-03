@@ -21,7 +21,7 @@ func main() {
 
 	// ctx := context.Background()
 
-	c := zitadel.NewClient(*zitadelURL, *pat, &zerolog.Logger{})
+	c := zitadel.NewClient(*zitadelURL, *pat, nil, &zerolog.Logger{})
 
 	successful, err := c.Login("test", "Testtest1234.")
 	if err != nil {
