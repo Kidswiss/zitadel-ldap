@@ -47,7 +47,7 @@ var payload = `{
 	}
   }`
 
-func (c Client) doRequest(method, url string, payload io.Reader) ([]byte, error) {
+func (c *Client) doRequest(method, url string, payload io.Reader) ([]byte, error) {
 
 	c.log.Debug().Msg("Sending request to Zitadel")
 
