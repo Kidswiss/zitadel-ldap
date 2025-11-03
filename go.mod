@@ -1,4 +1,4 @@
-module git.earthnet.ch/simon.beck/zitadel-ldap
+module github.com/jacobalberty/zitadel-ldap
 
 go 1.25.3
 

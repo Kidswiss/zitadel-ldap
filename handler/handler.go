@@ -9,12 +9,13 @@ import (
 	"os"
 	"strings"
 
-	"git.earthnet.ch/simon.beck/zitadel-ldap/zitadel"
 	"github.com/GeertJohan/yubigo"
 	"github.com/glauth/glauth/v2/pkg/config"
 	"github.com/glauth/glauth/v2/pkg/handler"
 	"github.com/glauth/ldap"
 	"github.com/rs/zerolog"
+
+	"github.com/jacobalberty/zitadel-ldap/zitadel"
 )
 
 type zitadelHandler struct {

@@ -4,10 +4,11 @@ import (
 	"flag"
 	"fmt"
 
-	ghandler "git.earthnet.ch/simon.beck/zitadel-ldap/handler"
-	"git.earthnet.ch/simon.beck/zitadel-ldap/zitadel"
 	"github.com/glauth/glauth/v2/pkg/handler"
 	"github.com/rs/zerolog"
+
+	ghandler "github.com/jacobalberty/zitadel-ldap/handler"
+	"github.com/jacobalberty/zitadel-ldap/zitadel"
 )
 
 var (
