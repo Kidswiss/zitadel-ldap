@@ -1,16 +1,34 @@
 package zitadel
 
 import (
+	"bytes"
 	"crypto/sha256"
 	"encoding/json"
 	"fmt"
-	"strings"
 	"time"
 )
 
 type LoginResult struct {
 	Code    int    `json:"code,omitempty"`
 	Message string `json:"message,omitempty"`
+}
+
+type loginRequest struct {
+	Checks   loginChecks `json:"checks"`
+	Lifetime string      `json:"lifetime"`
+}
+
+type loginChecks struct {
+	User     loginUser     `json:"user"`
+	Password loginPassword `json:"password"`
+}
+
+type loginUser struct {
+	LoginName string `json:"loginName"`
+}
+
+type loginPassword struct {
+	Password string `json:"password"`
 }
 
 // TODO: maybe caching the session will make things a bit faster?
@@ -27,8 +45,8 @@ func (c *Client) Login(username, password string) (bool, error) {
 
 	// TODO: maybe we should check against the API if the session still exists...
 	if ct, ok := c.sessionCache.Load(hash); ok {
-		c.log.Debug().Str("username", username).Msg(fmt.Sprintf("Existing session available, %.2f seconds old", time.Now().Sub(ct).Seconds()))
-		if time.Now().Sub(ct).Seconds() > 3600 {
+		c.log.Debug().Str("username", username).Msg(fmt.Sprintf("Existing session available, %.2f seconds old", time.Since(ct).Seconds()))
+		if time.Since(ct).Seconds() > 3600 {
 			c.log.Info().Str("username", username).Msg("Session expired, doing a new login")
 			return c.newSession(username, password)
 		}
@@ -43,19 +61,20 @@ func (c *Client) newSession(username, password string) (bool, error) {
 	url := fmt.Sprintf("%s/v2/sessions", c.url)
 	method := "POST"
 
-	loginQuery := fmt.Sprintf(`{
-	  "checks": {
-	    "user": {
-	      "loginName": "%s"
-	    },
-	    "password": {
-	      "password": "%s"
-	    }
-	  },
-	  "lifetime": "3600s"
-	}`, username, password)
+	loginReq := loginRequest{
+		Checks: loginChecks{
+			User:     loginUser{LoginName: username},
+			Password: loginPassword{Password: password},
+		},
+		Lifetime: "3600s",
+	}
 
-	rawBody, err := c.doRequest(method, url, strings.NewReader(loginQuery))
+	loginQuery, err := json.Marshal(loginReq)
+	if err != nil {
+		return false, err
+	}
+
+	rawBody, err := c.doRequest(method, url, bytes.NewReader(loginQuery))
 	if err != nil {
 		c.log.Debug().Str("username", username).Str("response", string(rawBody)).Msg("Error in querying Zitadel")
 		return false, err

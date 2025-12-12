@@ -40,10 +40,13 @@ func (c *Client) fetchMetadata(id string) (*MetadataResults, error) {
 	res := &MetadataResults{}
 
 	err = json.Unmarshal(rawBody, res)
+	if err != nil {
+		return nil, err
+	}
 
 	c.metadata.Store(id, res)
 
-	return res, err
+	return res, nil
 }
 
 func (c *Client) fetchAllMetadata() error {

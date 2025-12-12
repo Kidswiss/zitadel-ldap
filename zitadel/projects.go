@@ -70,10 +70,13 @@ func (c *Client) fetchProjects() (*ProjectResults, error) {
 	res := &ProjectResults{}
 
 	err = json.Unmarshal(rawBody, res)
+	if err != nil {
+		return nil, err
+	}
 
 	c.projects = res
 
-	return res, err
+	return res, nil
 }
 
 func (c *Client) ListRoles(projectID string) (*RoleResults, error) {
@@ -100,10 +103,13 @@ func (c *Client) fetchRoles(projectID string) (*RoleResults, error) {
 	res := &RoleResults{}
 
 	err = json.Unmarshal(rawBody, res)
+	if err != nil {
+		return nil, err
+	}
 
 	c.roles.Store(projectID, res)
 
-	return res, err
+	return res, nil
 }
 
 func (c *Client) fetchAllRolesAndProjects() error {
