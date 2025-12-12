@@ -55,8 +55,11 @@ func (c *Client) fetchGrants() (*GrantResults, error) {
 	res := &GrantResults{}
 
 	err = json.Unmarshal(rawBody, res)
+	if err != nil {
+		return nil, err
+	}
 
 	c.grants = res
 
-	return res, err
+	return res, nil
 }

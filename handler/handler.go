@@ -51,8 +51,16 @@ func (z *zitadelHandler) Bind(bindDN, bindSimplePw string, conn net.Conn) (ldap.
 
 	z.log.Info().Str("username", bindDN).Msg("trying to login")
 
-	userCN := strings.Split(bindDN, ",")[0]
-	user := strings.Split(userCN, "=")[1]
+	dnParts := strings.Split(bindDN, ",")
+	if len(dnParts) == 0 {
+		return ldap.LDAPResultInvalidCredentials, fmt.Errorf("invalid DN format: %s", bindDN)
+	}
+	userCN := dnParts[0]
+	cnParts := strings.Split(userCN, "=")
+	if len(cnParts) < 2 {
+		return ldap.LDAPResultInvalidCredentials, fmt.Errorf("invalid CN format: %s", userCN)
+	}
+	user := cnParts[1]
 
 	success, err := z.zitadelClient.Login(user, bindSimplePw)
 	if err != nil {
@@ -274,7 +282,7 @@ func (z *zitadelHandler) FindPosixAccounts(ctx context.Context, hierarchy string
 func (z *zitadelHandler) FindPosixGroups(ctx context.Context, hierarchy string) (entrylist []*ldap.Entry, err error) {
 	// _, span := z.tracer.Start(ctx, "handler.zitadelHandler.FindPosixGroups")
 	// defer span.End()
-	z.log.Info().Str("backend", "zitadel").Str("hieararchy", hierarchy).Msg("Finding posixGroup")
+	z.log.Info().Str("backend", "zitadel").Str("hierarchy", hierarchy).Msg("Finding posixGroup")
 
 	asGroupOfUniqueNames := hierarchy == "ou=groups"
 
