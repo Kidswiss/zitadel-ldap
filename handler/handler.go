@@ -239,6 +239,7 @@ func (z *zitadelHandler) FindPosixAccounts(ctx context.Context, hierarchy string
 		attrs = append(attrs, &ldap.EntryAttribute{Name: "description", Values: []string{u.Username}})
 		attrs = append(attrs, &ldap.EntryAttribute{Name: "gecos", Values: []string{u.Username}})
 		attrs = append(attrs, &ldap.EntryAttribute{Name: "gidNumber", Values: []string{fmt.Sprintf("%d", z.hash("zitadel"))}})
+		attrs = append(attrs, &ldap.EntryAttribute{Name: "pwdChangeTime", Values: []string{u.Human.PasswordChanged.UTC().Format("20060102150405.000Z")}})
 
 		groups, err := z.memberOf(u.UserID)
 		if err != nil {

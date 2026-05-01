@@ -12,7 +12,8 @@
     },
     "ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {
       "packages": "oathtool,ldap-utils"
-    }
+    },
+    "ghcr.io/devcontainers/features/nix:1": {}
   },
   // Configure tool-specific properties.
   "customizations": {
